@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatAIBoot</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chat-box { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+        #user-input { width: 80%; padding: 10px; }
+        #send-btn { padding: 10px 20px; }
+    </style>
+</head>
+<body>
+    <h1>ChatAIBoot</h1>
+    <div id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="Type your message..." />
+    <button id="send-btn">Send</button>
+
+    <script>
+        const chatBox = document.getElementById("chat-box");
+        const userInput = document.getElementById("user-input");
+        const sendBtn = document.getElementById("send-btn");
+
+        sendBtn.addEventListener("click", async () => {
+            const message = userInput.value;
+            if (!message) return;
+
+            chatBox.innerHTML += `<div>User: ${message}</div>`;
+            userInput.value = "";
+
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message }),
+            });
+
+            const data = await response.json();
+            chatBox.innerHTML += `<div>Bot: ${data.reply}</div>`;
+        });
+    </script>
+</body>
+</html>
